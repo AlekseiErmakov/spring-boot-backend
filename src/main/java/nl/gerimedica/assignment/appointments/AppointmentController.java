@@ -1,6 +1,8 @@
-package nl.gerimedica.assignment;
+package nl.gerimedica.assignment.appointments;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import nl.gerimedica.assignment.hospital.HospitalService;
+import nl.gerimedica.assignment.utils.HospitalUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +12,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class AppointmentController {
 
-    @Autowired
-    HospitalService hospitalService;
+    private final HospitalService hospitalService;
 
     /**
      * Example: {

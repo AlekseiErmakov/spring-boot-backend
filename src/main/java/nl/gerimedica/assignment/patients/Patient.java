@@ -1,9 +1,10 @@
-package nl.gerimedica.assignment;
+package nl.gerimedica.assignment.patients;
 
 import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
+import nl.gerimedica.assignment.appointments.Appointment;
 
 @Entity
 public class Patient {

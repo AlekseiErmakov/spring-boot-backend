@@ -1,4 +1,4 @@
-package nl.gerimedica.assignment;
+package nl.gerimedica.assignment.utils;
 
 import lombok.extern.slf4j.Slf4j;
 

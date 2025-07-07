@@ -1,8 +1,9 @@
-package nl.gerimedica.assignment;
+package nl.gerimedica.assignment.appointments;
 
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import nl.gerimedica.assignment.patients.Patient;
 
 @Entity
 public class Appointment {
