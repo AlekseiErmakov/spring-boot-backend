@@ -4,18 +4,22 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
+import lombok.Getter;
+import lombok.Setter;
 import nl.gerimedica.assignment.appointments.Appointment;
 
 @Entity
+@Getter
+@Setter
 public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
-    public String name;
-    public String ssn;
+    private Long id;
+    private String name;
+    private String ssn;
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
-    public List<Appointment> appointments;
+    private List<Appointment> appointments;
 
     public Patient() {
     }

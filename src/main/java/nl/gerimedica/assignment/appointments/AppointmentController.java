@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -27,14 +26,12 @@ public class AppointmentController {
     public ResponseEntity<List<Appointment>> createBulkAppointments(
             @RequestParam String patientName,
             @RequestParam String ssn,
-            @RequestBody Map<String, List<String>> payload
+            @RequestBody BulkAppointmentRequest bulkAppointmentRequest
     ) {
-        List<String> reasons = payload.get("reasons");
-        List<String> dates = payload.get("dates");
 
         HospitalUtils.recordUsage("Controller triggered bulk appointments creation");
 
-        List<Appointment> created = hospitalService.bulkCreateAppointments(patientName, ssn, reasons, dates);
+        List<Appointment> created = hospitalService.bulkCreateAppointments(patientName, ssn, bulkAppointmentRequest);
         return new ResponseEntity<>(created, HttpStatus.OK);
     }
 

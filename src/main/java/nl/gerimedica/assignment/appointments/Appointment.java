@@ -2,39 +2,32 @@ package nl.gerimedica.assignment.appointments;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Objects;
+import lombok.Getter;
 import nl.gerimedica.assignment.patients.Patient;
 
 @Entity
+@Getter
 public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
-    public String reason;
-    public String date;
+    private Long id;
+    @Enumerated(EnumType.STRING)
+    private Reason reason;
+    private LocalDate date;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
-    public Patient patient;
+    private Patient patient;
 
     public Appointment() {
     }
 
-    public Appointment(String reason, String date, Patient patient) {
+    public Appointment(Reason reason, LocalDate date, Patient patient) {
         this.reason = reason;
         this.date = date;
         this.patient = patient;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Appointment that)) return false;
-        return Objects.equals(reason, that.reason);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(reason);
-    }
 }
