@@ -1,4 +1,4 @@
-package nl.gerimedica.assignment.appointments;
+package nl.gerimedica.assignment.appointments.dto;
 
 import java.util.List;
 

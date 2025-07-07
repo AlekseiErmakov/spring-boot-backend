@@ -2,7 +2,9 @@ package nl.gerimedica.assignment.patients;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import nl.gerimedica.assignment.common.exceptions.InvalidDataException;
+import nl.gerimedica.assignment.common.exceptions.model.InvalidDataException;
+import nl.gerimedica.assignment.patients.dto.PatientCreateRequest;
+import nl.gerimedica.assignment.patients.model.Patient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +25,7 @@ public class PatientService {
 
     @Transactional(readOnly = true)
     public boolean existsBySsn(String ssn) {
-        return patientRepository.existsBy(ssn);
+        return patientRepository.existsBySsn(ssn);
     }
 
     @Transactional

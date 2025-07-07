@@ -1,4 +1,4 @@
-package nl.gerimedica.assignment.patients;
+package nl.gerimedica.assignment.patients.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import nl.gerimedica.assignment.appointments.Appointment;
+import nl.gerimedica.assignment.appointments.model.Appointment;
 
 @Entity
 @Getter

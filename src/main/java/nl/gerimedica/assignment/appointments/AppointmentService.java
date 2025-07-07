@@ -2,8 +2,12 @@ package nl.gerimedica.assignment.appointments;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import nl.gerimedica.assignment.common.exceptions.NotFoundException;
-import nl.gerimedica.assignment.patients.Patient;
+import nl.gerimedica.assignment.appointments.dto.AppointmentDto;
+import nl.gerimedica.assignment.appointments.dto.AppointmentRequest;
+import nl.gerimedica.assignment.appointments.model.Appointment;
+import nl.gerimedica.assignment.appointments.model.Reason;
+import nl.gerimedica.assignment.common.exceptions.model.NotFoundException;
+import nl.gerimedica.assignment.patients.model.Patient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +32,7 @@ public class AppointmentService {
 
     @Transactional(readOnly = true)
     public AppointmentDto getLatestAppointmentBySsn(String ssn) {
-        return appointmentRepository.findFirstByPatient_ssnOrderByDateDateDesc(ssn)
+        return appointmentRepository.findFirstByPatient_ssnOrderByDateDesc(ssn)
                 .map(AppointmentMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("No appointments found for SSN: %s", ssn));
     }
@@ -40,6 +44,6 @@ public class AppointmentService {
 
     @Transactional
     public void deleteAppointmentsBySsn(String ssn) {
-        appointmentRepository.deleteAllByPatient_snn(ssn);
+        appointmentRepository.deleteAllByPatient_ssn(ssn);
     }
 }

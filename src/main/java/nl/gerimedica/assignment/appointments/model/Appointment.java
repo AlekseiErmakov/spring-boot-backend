@@ -1,4 +1,4 @@
-package nl.gerimedica.assignment.appointments;
+package nl.gerimedica.assignment.appointments.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,7 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.Getter;
-import nl.gerimedica.assignment.patients.Patient;
+import nl.gerimedica.assignment.patients.model.Patient;
 
 @Entity
 @Getter

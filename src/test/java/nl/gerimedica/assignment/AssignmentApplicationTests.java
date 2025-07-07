@@ -1,30 +1,49 @@
 package nl.gerimedica.assignment;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import nl.gerimedica.assignment.AssignmentApplicationTests.MyContainersConfiguration;
+import nl.gerimedica.assignment.appointments.AppointmentRepository;
+import nl.gerimedica.assignment.patients.PatientRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+@AutoConfigureMockMvc
+@SpringBootTest(classes = MyContainersConfiguration.class)
+@Testcontainers
+public abstract class AssignmentApplicationTests {
 
-@SpringBootTest
-class AssignmentApplicationTests {
-	private RestTemplate restTemplate;
+    @Autowired
+    protected MockMvc mockMvc;
+    @Autowired
+    private PatientRepository patientRepository;
 
-	@BeforeEach
-	void setUp() {
-		restTemplate = new RestTemplate();
-	}
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
-	@Test
-	void testSuccess() {
-		String url = "http://localhost:8080/api/appointments-by-reason?keyword=Checkup";
+    @Transactional
+    @AfterEach
+    public void clean() {
+        appointmentRepository.deleteAll();
+        patientRepository.deleteAll();
+    }
 
-		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+    @TestConfiguration(proxyBeanMethods = false)
+    static class MyContainersConfiguration {
 
-		String body = response.getBody();
+        @Bean
+        @ServiceConnection
+        PostgreSQLContainer<?> postgreSQLContainer() {
+            return new PostgreSQLContainer<>("postgres:15-alpine");
+        }
+    }
 
-		assertTrue(body.contains("\"reason\" : \"SomeNonExistentField\""));
-	}
 }
+

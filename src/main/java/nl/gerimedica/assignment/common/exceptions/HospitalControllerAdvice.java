@@ -2,6 +2,9 @@ package nl.gerimedica.assignment.common.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import nl.gerimedica.assignment.common.exceptions.dto.ErrorResponse;
+import nl.gerimedica.assignment.common.exceptions.model.InvalidDataException;
+import nl.gerimedica.assignment.common.exceptions.model.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

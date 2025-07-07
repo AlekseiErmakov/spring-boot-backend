@@ -1,4 +1,4 @@
-package nl.gerimedica.assignment.appointments;
+package nl.gerimedica.assignment.appointments.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

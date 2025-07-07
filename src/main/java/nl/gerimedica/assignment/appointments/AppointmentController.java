@@ -2,9 +2,11 @@ package nl.gerimedica.assignment.appointments;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import nl.gerimedica.assignment.appointments.dto.AppointmentDto;
+import nl.gerimedica.assignment.appointments.dto.BulkAppointmentRequest;
+import nl.gerimedica.assignment.appointments.model.Reason;
 import nl.gerimedica.assignment.hospital.HospitalService;
 import nl.gerimedica.assignment.utils.HospitalUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +25,8 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
 
     /**
-     * Example: { "patientName": "John Doe", "patientSsn": "123-45-6789", "appointments": [{"reason": "Checkup", "date": "2025-02-01"}, {"reason": "Follow-up", "date": "2025-02-15"}] }
+     * Example: { "patientName": "John Doe", "patientSsn": "123-45-6789", "appointments": [{"reason": "Checkup", "date": "2025-02-01"}, {"reason":
+     * "Follow-up", "date": "2025-02-15"}] }
      */
     @PostMapping("/bulk")
     public ResponseEntity<List<AppointmentDto>> createBulkAppointments(@RequestBody BulkAppointmentRequest request) {

@@ -1,4 +1,4 @@
-package nl.gerimedica.assignment.common.exceptions;
+package nl.gerimedica.assignment.common.exceptions.model;
 
 public abstract class BaseHospitalException extends RuntimeException {
 

@@ -3,12 +3,12 @@ package nl.gerimedica.assignment.hospital;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import nl.gerimedica.assignment.appointments.AppointmentDto;
 import nl.gerimedica.assignment.appointments.AppointmentService;
-import nl.gerimedica.assignment.appointments.BulkAppointmentRequest;
-import nl.gerimedica.assignment.common.exceptions.InvalidDataException;
-import nl.gerimedica.assignment.patients.Patient;
+import nl.gerimedica.assignment.appointments.dto.AppointmentDto;
+import nl.gerimedica.assignment.appointments.dto.BulkAppointmentRequest;
+import nl.gerimedica.assignment.common.exceptions.model.InvalidDataException;
 import nl.gerimedica.assignment.patients.PatientService;
+import nl.gerimedica.assignment.patients.model.Patient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -3,6 +3,8 @@ package nl.gerimedica.assignment.appointments;
 import java.util.Collection;
 import java.util.List;
 import lombok.experimental.UtilityClass;
+import nl.gerimedica.assignment.appointments.dto.AppointmentDto;
+import nl.gerimedica.assignment.appointments.model.Appointment;
 
 @UtilityClass
 public class AppointmentMapper {
