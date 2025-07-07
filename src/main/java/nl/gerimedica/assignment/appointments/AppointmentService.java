@@ -8,6 +8,7 @@ import nl.gerimedica.assignment.appointments.model.Appointment;
 import nl.gerimedica.assignment.appointments.model.Reason;
 import nl.gerimedica.assignment.common.exceptions.model.NotFoundException;
 import nl.gerimedica.assignment.patients.model.Patient;
+import nl.gerimedica.assignment.utils.HospitalUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,18 +33,23 @@ public class AppointmentService {
 
     @Transactional(readOnly = true)
     public AppointmentDto getLatestAppointmentBySsn(String ssn) {
-        return appointmentRepository.findFirstByPatient_ssnOrderByDateDesc(ssn)
+        AppointmentDto appointmentDto = appointmentRepository.findFirstByPatient_ssnOrderByDateDesc(ssn)
                 .map(AppointmentMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("No appointments found for SSN: %s", ssn));
+        HospitalUtils.recordUsage("Got latest appointment for patient: " + ssn);
+        return appointmentDto;
     }
 
     @Transactional(readOnly = true)
     public List<AppointmentDto> getAppointmentsByReason(Reason reason) {
-        return AppointmentMapper.toDto(appointmentRepository.findAllByReason(reason));
+        List<AppointmentDto> appointments = AppointmentMapper.toDto(appointmentRepository.findAllByReason(reason));
+        HospitalUtils.recordUsage("Got latest appointment for reason: " + reason.getValue());
+        return appointments;
     }
 
     @Transactional
     public void deleteAppointmentsBySsn(String ssn) {
-        appointmentRepository.deleteAllByPatient_ssn(ssn);
+        long amount = appointmentRepository.deleteAllByPatient_ssn(ssn);
+        HospitalUtils.recordUsage("Deleted " + amount + "appointments for reason: " + ssn);
     }
 }

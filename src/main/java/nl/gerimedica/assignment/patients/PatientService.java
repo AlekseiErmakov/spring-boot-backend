@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.gerimedica.assignment.common.exceptions.model.InvalidDataException;
 import nl.gerimedica.assignment.patients.dto.PatientCreateRequest;
 import nl.gerimedica.assignment.patients.model.Patient;
+import nl.gerimedica.assignment.utils.HospitalUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +18,6 @@ public class PatientService {
 
     @Transactional
     public Patient getPatient(String patientName, String ssn) {
-        //add log but with optional approach
-        // Use Optional to handle the case where the patient might not be found
         return patientRepository.findBySsn(ssn)
                 .orElseGet(() -> patientRepository.save(new Patient(patientName, ssn)));
     }
@@ -34,6 +33,9 @@ public class PatientService {
             log.warn("Patient with SSN {} already exists", patientCreateRequest.ssn());
             throw new InvalidDataException("Patient with SSN %s already exists", patientCreateRequest.ssn());
         }
-        return patientRepository.save(new Patient(patientCreateRequest.name(), patientCreateRequest.ssn())).getId();
+
+        Long patientId = patientRepository.save(new Patient(patientCreateRequest.name(), patientCreateRequest.ssn())).getId();
+        HospitalUtils.recordUsage("Created patient with ID: " + patientId + " and SSN: " + patientCreateRequest.ssn());
+        return patientId;
     }
 }

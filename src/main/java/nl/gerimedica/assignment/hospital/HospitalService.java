@@ -9,6 +9,7 @@ import nl.gerimedica.assignment.appointments.dto.BulkAppointmentRequest;
 import nl.gerimedica.assignment.common.exceptions.model.InvalidDataException;
 import nl.gerimedica.assignment.patients.PatientService;
 import nl.gerimedica.assignment.patients.model.Patient;
+import nl.gerimedica.assignment.utils.HospitalUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +24,12 @@ public class HospitalService {
     @Transactional
     public List<AppointmentDto> bulkCreateAppointments(BulkAppointmentRequest bulkAppointmentRequest) {
         Patient patient = patientService.getPatient(bulkAppointmentRequest.patientName(), bulkAppointmentRequest.patientSsn());
-        return appointmentService.saveBulkAppointments(
+        List<AppointmentDto> appointmentDtos = appointmentService.saveBulkAppointments(
                 bulkAppointmentRequest.appointments(),
                 patient
         );
+        HospitalUtils.recordUsage("Bulk appointments created for patient: " + patient.getSsn());
+        return appointmentDtos;
     }
 
     @Transactional
@@ -34,6 +37,7 @@ public class HospitalService {
         if (patientService.existsBySsn(ssn)) {
             log.info("Deleting appointments for SSN: {}", ssn);
             appointmentService.deleteAppointmentsBySsn(ssn);
+            HospitalUtils.recordUsage("Bulk appointments created for patient: " + ssn);
         } else {
             throw new InvalidDataException("Invalid SSN: %s", ssn);
         }
