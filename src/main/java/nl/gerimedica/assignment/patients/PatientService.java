@@ -2,6 +2,7 @@ package nl.gerimedica.assignment.patients;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.gerimedica.assignment.common.exceptions.InvalidDataException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,19 +19,19 @@ public class PatientService {
         // Use Optional to handle the case where the patient might not be found
         return patientRepository.findBySsn(ssn)
                 .orElseGet(() -> patientRepository.save(new Patient(patientName, ssn)));
-//        if (found == null) {
-//            log.info("Creating new patient with SSN: {}", ssn);
-//            found = new Patient(patientName, ssn);
-//            savePatient(found);
-//        } else {
-//            log.info("Existing patient found, SSN: {}", found.ssn);
-//        }
     }
 
     @Transactional(readOnly = true)
-    public Patient findPatientBySsn(String ssn) {
-        // Use Optional to handle the case where the patient might not be found
-        return patientRepository.findBySsn(ssn)
-                .orElseThrow(() -> new IllegalArgumentException("Patient with SSN " + ssn + " not found"));
+    public boolean existsBySsn(String ssn) {
+        return patientRepository.existsBy(ssn);
+    }
+
+    @Transactional
+    public Long createPatient(PatientCreateRequest patientCreateRequest) {
+        if (patientRepository.existsBySsn(patientCreateRequest.ssn())) {
+            log.warn("Patient with SSN {} already exists", patientCreateRequest.ssn());
+            throw new InvalidDataException("Patient with SSN %s already exists", patientCreateRequest.ssn());
+        }
+        return patientRepository.save(new Patient(patientCreateRequest.name(), patientCreateRequest.ssn())).getId();
     }
 }

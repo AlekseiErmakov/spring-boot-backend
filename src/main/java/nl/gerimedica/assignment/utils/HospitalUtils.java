@@ -1,14 +1,15 @@
 package nl.gerimedica.assignment.utils;
 
+import java.util.concurrent.atomic.AtomicLong;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class HospitalUtils {
 
-    private static int usageCounter = 0;
+    private static final AtomicLong usageCounter = new AtomicLong(0);
 
     public static void recordUsage(String context) {
-        usageCounter++;
-        log.info("HospitalUtils used. Counter: {} | Context: {}", usageCounter, context);
+        long count = usageCounter.incrementAndGet();
+        log.info("HospitalUtils used. Counter: {} | Context: {}", count, context);
     }
 }

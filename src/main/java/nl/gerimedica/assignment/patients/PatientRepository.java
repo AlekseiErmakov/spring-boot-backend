@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     Optional<Patient> findBySsn(String ssn);
+    boolean existsBy(String ssn);
+
+    boolean existsBySsn(String ssn);
 }

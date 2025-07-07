@@ -1,55 +1,51 @@
 package nl.gerimedica.assignment.appointments;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import nl.gerimedica.assignment.hospital.HospitalService;
 import nl.gerimedica.assignment.utils.HospitalUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
+@RequestMapping("/appointments")
 public class AppointmentController {
 
     private final HospitalService hospitalService;
+    private final AppointmentService appointmentService;
 
     /**
-     * Example: {
-     * "reasons": ["Checkup", "Follow-up", "X-Ray"],
-     * "dates": ["2025-02-01", "2025-02-15", "2025-03-01"]
-     * }
+     * Example: { "patientName": "John Doe", "patientSsn": "123-45-6789", "appointments": [{"reason": "Checkup", "date": "2025-02-01"}, {"reason": "Follow-up", "date": "2025-02-15"}] }
      */
-    @PostMapping("/bulk-appointments")
-    public ResponseEntity<List<Appointment>> createBulkAppointments(
-            @RequestParam String patientName,
-            @RequestParam String ssn,
-            @RequestBody BulkAppointmentRequest bulkAppointmentRequest
-    ) {
+    @PostMapping("/bulk")
+    public ResponseEntity<List<AppointmentDto>> createBulkAppointments(@RequestBody BulkAppointmentRequest request) {
 
         HospitalUtils.recordUsage("Controller triggered bulk appointments creation");
 
-        List<Appointment> created = hospitalService.bulkCreateAppointments(patientName, ssn, bulkAppointmentRequest);
-        return new ResponseEntity<>(created, HttpStatus.OK);
+        return ResponseEntity.ok(hospitalService.bulkCreateAppointments(request));
     }
 
-    @GetMapping("/appointments-by-reason")
-    public ResponseEntity<List<Appointment>> getAppointmentsByReason(@RequestParam String keyword) {
-        List<Appointment> found = hospitalService.getAppointmentsByReason(keyword);
-        return new ResponseEntity<>(found, HttpStatus.OK);
+    @GetMapping("/by-reason")
+    public ResponseEntity<List<AppointmentDto>> getAppointmentsByReason(@RequestParam Reason reason) {
+        return ResponseEntity.ok(appointmentService.getAppointmentsByReason(reason));
     }
 
-    @PostMapping("/delete-appointments")
+    @DeleteMapping
     public ResponseEntity<String> deleteAppointmentsBySSN(@RequestParam String ssn) {
         hospitalService.deleteAppointmentsBySSN(ssn);
-        return new ResponseEntity<>("Deleted all appointments for SSN: " + ssn, HttpStatus.OK);
+        return ResponseEntity.ok("Deleted all appointments for SSN: " + ssn);
     }
 
-    @GetMapping("/appointments/latest")
-    public ResponseEntity<Appointment> getLatestAppointment(@RequestParam String ssn) {
-        Appointment latest = hospitalService.findLatestAppointmentBySSN(ssn);
-        return new ResponseEntity<>(latest, HttpStatus.OK);
+    @GetMapping("/latest")
+    public ResponseEntity<AppointmentDto> getLatestAppointment(@RequestParam String ssn) {
+        return ResponseEntity.ok(appointmentService.getLatestAppointmentBySsn(ssn));
     }
 }

@@ -1,9 +1,14 @@
 package nl.gerimedica.assignment.patients;
 
-import jakarta.persistence.*;
-
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import nl.gerimedica.assignment.appointments.Appointment;
@@ -19,7 +24,7 @@ public class Patient {
     private String name;
     private String ssn;
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
-    private List<Appointment> appointments;
+    private Set<Appointment> appointments = new HashSet<>();
 
     public Patient() {
     }
@@ -31,8 +36,12 @@ public class Patient {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Patient patient)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Patient patient)) {
+            return false;
+        }
         return Objects.equals(ssn, patient.ssn);
     }
 
